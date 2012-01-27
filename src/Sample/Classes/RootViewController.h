@@ -12,9 +12,9 @@
 @interface RootViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource> 
 {
 @private
-   UIWindow *window_;
+   UIWindow *__unsafe_unretained window_;
 }
 
-@property (nonatomic, assign) UIWindow *window;
+@property (nonatomic, unsafe_unretained) UIWindow *window;
 
 @end

@@ -28,11 +28,10 @@ static SDWebImageManager *instance;
 
 - (void)dealloc
 {
-    [delegates release], delegates = nil;
-    [downloaders release], downloaders = nil;
-    [downloaderForURL release], downloaderForURL = nil;
-    [failedURLs release], failedURLs = nil;
-    [super dealloc];
+    delegates = nil;
+    downloaders = nil;
+    downloaderForURL = nil;
+    failedURLs = nil;
 }
 
 
@@ -75,7 +74,7 @@ static SDWebImageManager *instance;
         return;
     }
 
-    SDWebImageDownloader *downloader = [[downloaders objectAtIndex:idx] retain];
+    SDWebImageDownloader *downloader = [downloaders objectAtIndex:idx];
 
     [delegates removeObjectAtIndex:idx];
     [downloaders removeObjectAtIndex:idx];
@@ -87,7 +86,6 @@ static SDWebImageManager *instance;
         [downloaderForURL removeObjectForKey:downloader.url];
     }
 
-    [downloader release];
 }
 
 #pragma mark SDImageCacheDelegate
@@ -123,7 +121,6 @@ static SDWebImageManager *instance;
 
 - (void)imageDownloader:(SDWebImageDownloader *)downloader didFinishWithImage:(UIImage *)image
 {
-    [downloader retain];
 
     // Notify all the delegates with this downloader
     for (NSInteger idx = [downloaders count] - 1; idx >= 0; idx--)
@@ -160,7 +157,6 @@ static SDWebImageManager *instance;
 
     // Release the downloader
     [downloaderForURL removeObjectForKey:downloader.url];
-    [downloader release];
 }
 
 

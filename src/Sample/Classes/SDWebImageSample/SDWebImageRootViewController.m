@@ -18,9 +18,8 @@
 
 - (void)dealloc 
 {
-   [activityIndicatorView_ release], activityIndicatorView_ = nil;
-   [images_ release], images_ = nil;
-   [super dealloc];
+   activityIndicatorView_ = nil;
+   images_ = nil;
 }
 
 - (void)viewDidLoad 

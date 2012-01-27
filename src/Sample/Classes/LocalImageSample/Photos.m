@@ -16,17 +16,16 @@
 @synthesize delegate = delegate_;
 
 - (void)dealloc {
-   [documentPath_ release], documentPath_ = nil;
-   [photosPath_ release], photosPath_ = nil;
-   [thumbnailsPath_ release], thumbnailsPath_ = nil;
+   documentPath_ = nil;
+   photosPath_ = nil;
+   thumbnailsPath_ = nil;
    
-   [fileNames_ release], fileNames_ = nil;
-   [photoCache_ release], photoCache_ = nil;
-   [thumbnailCache_ release], thumbnailCache_ = nil;
+   fileNames_ = nil;
+   photoCache_ = nil;
+   thumbnailCache_ = nil;
    
-   [queue_ release], queue_ = nil;
+   queue_ = nil;
    
-   [super dealloc];
 }
 
 - (id)init {
@@ -46,7 +45,7 @@
 
 - (void)releasePhotoList {
    // Release cached list of file names to force refresh.
-   [fileNames_ release], fileNames_ = nil;
+   fileNames_ = nil;
 }
 
 
@@ -68,7 +67,6 @@
    if ( ! documentPath_ ) {
 		NSArray *searchPaths =NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 		documentPath_ = [searchPaths objectAtIndex: 0];
-      [documentPath_ retain];
    }
    return documentPath_;
 }
@@ -76,7 +74,6 @@
 - (NSString *)photosPath {
    if ( ! photosPath_ ) {
       photosPath_ = [[self documentPath] stringByAppendingPathComponent:@"images"];
-      [photosPath_ retain];
       [self ensurePathAt:photosPath_];
    }
    return photosPath_;
@@ -85,7 +82,6 @@
 - (NSString *)thumbnailsPath {
    if ( ! thumbnailsPath_ ) {
       thumbnailsPath_ = [[self documentPath] stringByAppendingPathComponent:@"thumbnails"];
-      [thumbnailsPath_ retain];
       [self ensurePathAt:thumbnailsPath_];
    }
    return thumbnailsPath_;
@@ -102,7 +98,6 @@
       NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self ENDSWITH '.jpg'"];
       NSArray *imagesOnly = [dirContents filteredArrayUsingPredicate:predicate];
       fileNames_ = [NSMutableArray arrayWithArray:imagesOnly];
-      [fileNames_ retain];
    } else {
 #ifdef DEBUG
       NSLog(@"error: %@", [error localizedDescription]);
@@ -198,7 +193,6 @@
                                                                            selector:@selector(savePhoto:)
                                                                              object:data];
    [queue_ addOperation:operation];
-   [operation release];
 }
 
 - (void)deletePhotoAtPath:(NSString *)path {
@@ -222,7 +216,6 @@
       NSString *thumbnailPath = [[self thumbnailsPath] stringByAppendingPathComponent:name];
       [self deletePhotoAtPath:thumbnailPath];
    }
-   [data release];
 }
 
 - (void)removeCachedImageNamed:(NSString *)name {
@@ -268,7 +261,6 @@
    // performs the physical delete of the image files.
    // Therefore, we will retain name and release it in
    // the secondary thread.
-   [name retain];
 
    // Remove the image from the cache. 
    [self removeCachedImageNamed:name];
@@ -278,7 +270,6 @@
                                                                            selector:@selector(deleteImageNamed:)
                                                                              object:name];
    [queue_ addOperation:operation];
-   [operation release];
 }
 
 - (void)exportImageAtIndex:(NSInteger)index 

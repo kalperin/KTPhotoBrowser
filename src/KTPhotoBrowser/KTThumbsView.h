@@ -15,8 +15,8 @@
 @interface KTThumbsView : UIScrollView <UIScrollViewDelegate>
 {
 @private
-   id <KTThumbsViewDataSource> dataSource_;
-   KTThumbsViewController *controller_;
+   id <KTThumbsViewDataSource> __unsafe_unretained dataSource_;
+   KTThumbsViewController *__unsafe_unretained controller_;
    BOOL thumbsHaveBorder_;
    NSInteger thumbsPerRow_;
    CGSize thumbSize_;
@@ -30,8 +30,8 @@
    int lastItemsPerRow_;
 }
 
-@property (nonatomic, assign) id<KTThumbsViewDataSource> dataSource;
-@property (nonatomic, assign) KTThumbsViewController *controller;
+@property (nonatomic, unsafe_unretained) id<KTThumbsViewDataSource> dataSource;
+@property (nonatomic, unsafe_unretained) KTThumbsViewController *controller;
 @property (nonatomic, assign) BOOL thumbsHaveBorder;
 @property (nonatomic, assign) NSInteger thumbsPerRow;
 @property (nonatomic, assign) CGSize thumbSize;

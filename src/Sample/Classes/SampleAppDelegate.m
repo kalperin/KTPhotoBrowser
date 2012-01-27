@@ -25,11 +25,9 @@
       RootViewController *newController = [[RootViewController alloc] initWithStyle:UITableViewStylePlain];
       [newController setWindow:window];
       newNavController = [[UINavigationController alloc] initWithRootViewController:newController];
-      [newController release];
    } else {
       LocalImageRootViewController *newController = [[LocalImageRootViewController alloc] init];
       newNavController = [[UINavigationController alloc] initWithRootViewController:newController];
-      [newController release];
    }
    
    [[newNavController navigationBar] setBarStyle:UIBarStyleBlack];
@@ -44,11 +42,6 @@
 }
 
 
-- (void)dealloc 
-{
-    [window release];
-    [super dealloc];
-}
 
 
 @end

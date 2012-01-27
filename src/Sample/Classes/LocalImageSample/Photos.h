@@ -12,7 +12,7 @@
 @protocol PhotosDelegate;
 
 @interface Photos : NSObject <KTPhotoBrowserDataSource> {
-   id<PhotosDelegate> delegate_;
+   id<PhotosDelegate> __unsafe_unretained delegate_;
    
    NSString *documentPath_;
    NSString *photosPath_;
@@ -25,7 +25,7 @@
    NSOperationQueue *queue_;
 }
 
-@property (nonatomic, assign) id<PhotosDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id<PhotosDelegate> delegate;
 
 - (void)flushCache;
 - (void)savePhoto:(UIImage *)photo withName:(NSString *)name addToPhotoAlbum:(BOOL)addToPhotoAlbum;

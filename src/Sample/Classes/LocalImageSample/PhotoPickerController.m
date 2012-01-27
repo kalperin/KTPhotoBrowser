@@ -22,10 +22,9 @@
 @implementation PhotoPickerController
 
 - (void)dealloc {
-   [imagePicker_ release], imagePicker_ = nil;
-   [popoverController_ release], popoverController_ = nil;
+   imagePicker_ = nil;
+   popoverController_ = nil;
    
-   [super dealloc];
 }
 
 - (id)initWithDelegate:(id)delegate {

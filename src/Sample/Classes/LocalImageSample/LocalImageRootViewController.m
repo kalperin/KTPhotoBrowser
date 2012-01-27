@@ -19,11 +19,10 @@
 
 - (void)dealloc 
 {
-   [activityIndicatorView_ release], activityIndicatorView_ = nil;
-   [myPhotos_ release], myPhotos_ = nil;
-   [activityIndicatorView_ release], activityIndicatorView_ = nil;
+   activityIndicatorView_ = nil;
+   myPhotos_ = nil;
+   activityIndicatorView_ = nil;
    
-   [super dealloc];
 }
 
 - (void)viewDidLoad 
@@ -36,7 +35,6 @@
                                                                               target:self
                                                                               action:@selector(addPhoto)];
    [[self navigationItem] setRightBarButtonItem:addButton];
-   [addButton release];
    
    if (myPhotos_ == nil) {
       myPhotos_ = [[Photos alloc] init];
@@ -171,7 +169,6 @@
    
    [self.navigationController presentModalViewController:controller 
                                                 animated:YES];
-   [controller release];   
 }
 
 #pragma mark -

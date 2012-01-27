@@ -15,10 +15,6 @@
 
 @synthesize controller = controller_;
 
-- (void)dealloc 
-{
-   [super dealloc];
-}
 
 - (id)initWithFrame:(CGRect)frame
 {

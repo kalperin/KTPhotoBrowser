@@ -23,8 +23,7 @@
 
 - (void)dealloc 
 {
-   [imageView_ release], imageView_ = nil;
-   [super dealloc];
+   imageView_ = nil;
 }
 
 - (id)initWithFrame:(CGRect)frame

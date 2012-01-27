@@ -13,10 +13,10 @@
 @interface KTThumbView : UIButton 
 {
 @private
-   KTThumbsViewController *controller_;
+   KTThumbsViewController *__unsafe_unretained controller_;
 }
 
-@property (nonatomic, assign) KTThumbsViewController *controller;
+@property (nonatomic, unsafe_unretained) KTThumbsViewController *controller;
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)setThumbImage:(UIImage *)newImage;

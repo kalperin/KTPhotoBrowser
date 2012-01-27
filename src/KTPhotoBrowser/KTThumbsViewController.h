@@ -21,7 +21,7 @@
    BOOL navbarWasTranslucent_;
 }
 
-@property (nonatomic, retain) id <KTPhotoBrowserDataSource> dataSource;
+@property (nonatomic, strong) id <KTPhotoBrowserDataSource> dataSource;
 
 /**
  * Re-displays the thumbnail images.

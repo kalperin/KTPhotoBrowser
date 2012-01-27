@@ -21,8 +21,7 @@
 
 - (void)dealloc
 {
-   [reusableThumbViews_ release], reusableThumbViews_ = nil;
-   [super dealloc];
+   reusableThumbViews_ = nil;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -56,7 +55,7 @@
       // reusableThumbViews set, so we retain/autorelease
       // it before returning it so that it's not immediately
       // deallocated when removed form the set.
-      [[thumbView retain] autorelease];
+      //[[thumbView retain] autorelease];
       [reusableThumbViews_ removeObject:thumbView];
    }
    return thumbView;

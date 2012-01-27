@@ -14,11 +14,11 @@
 @interface KTPhotoView : UIScrollView <UIScrollViewDelegate>
 {
    UIImageView *imageView_;
-   KTPhotoScrollViewController *scroller_;
+   KTPhotoScrollViewController *__unsafe_unretained scroller_;
    NSInteger index_;
 }
 
-@property (nonatomic, assign) KTPhotoScrollViewController *scroller;
+@property (nonatomic, unsafe_unretained) KTPhotoScrollViewController *scroller;
 @property (nonatomic, assign) NSInteger index;
 
 - (void)setImage:(UIImage *)newImage;

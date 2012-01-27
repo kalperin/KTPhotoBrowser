@@ -20,10 +20,6 @@
 
 @synthesize window = window_;
 
-- (void)dealloc 
-{
-   [super dealloc];
-}
 
 - (void)viewDidLoad 
 {
@@ -72,21 +68,18 @@
    LocalImageRootViewController *newController = [[LocalImageRootViewController alloc] init];
    [[self navigationController] pushViewController:newController
                                           animated:YES];
-   [newController release]; 
 }
 
 - (void)showSDWebImageSample 
 {
    SDWebImageRootViewController *newController = [[SDWebImageRootViewController alloc] init];
    [[self navigationController] pushViewController:newController animated:YES];
-   [newController release];
 }
 
 - (void)showFlickrSample 
 {
    FlickrRootViewController *newController = [[FlickrRootViewController alloc] init];
    [[self navigationController] pushViewController:newController animated:YES];
-   [newController release];
 }
 
 
@@ -112,9 +105,9 @@
    static NSString *CellIdentifier = @"RootViewControllerCellCache";
    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
    if(cell == nil) {
-      cell = [[[UITableViewCell alloc]
+      cell = [[UITableViewCell alloc]
                initWithStyle: UITableViewCellStyleSubtitle
-               reuseIdentifier:CellIdentifier] autorelease];
+               reuseIdentifier:CellIdentifier];
       [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
    }
 

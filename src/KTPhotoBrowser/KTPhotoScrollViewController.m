@@ -45,22 +45,21 @@ const CGFloat ktkDefaultToolbarHeight = 44;
 
 - (void)dealloc 
 {
-   [nextButton_ release], nextButton_ = nil;
-   [previousButton_ release], previousButton_ = nil;
-   [scrollView_ release], scrollView_ = nil;
-   [toolbar_ release], toolbar_ = nil;
-   [photoViews_ release], photoViews_ = nil;
+   nextButton_ = nil;
+   previousButton_ = nil;
+   scrollView_ = nil;
+   toolbar_ = nil;
+   photoViews_ = nil;
   
-   [dataSource_ release], dataSource_ = nil;  
+   dataSource_ = nil;  
    
-   [super dealloc];
 }
 
 - (id)initWithDataSource:(id <KTPhotoBrowserDataSource>)dataSource andStartWithPhotoAtIndex:(NSUInteger)index 
 {
    if (self = [super init]) {
      startWithIndex_ = index;
-     dataSource_ = [dataSource retain];
+     dataSource_ = dataSource;
      
      // Make sure to set wantsFullScreenLayout or the photo
      // will not display behind the status bar.
@@ -93,9 +92,8 @@ const CGFloat ktkDefaultToolbarHeight = 44;
    
    [[self view] addSubview:newView];
    
-   scrollView_ = [newView retain];
+   scrollView_ = newView;
    
-   [newView release];
    
    nextButton_ = [[UIBarButtonItem alloc] 
                   initWithImage:KTLoadImageFromBundle(@"nextIcon.png")
@@ -150,10 +148,6 @@ const CGFloat ktkDefaultToolbarHeight = 44;
    [toolbar_ setItems:toolbarItems];
    [[self view] addSubview:toolbar_];
    
-   if (trashButton) [trashButton release];
-   if (exportButton) [exportButton release];
-   [toolbarItems release];
-   [space release];
 }
 
 - (void)setTitleWithCurrentPhotoIndex 
@@ -335,7 +329,6 @@ const CGFloat ktkDefaultToolbarHeight = 44;
       
       [scrollView_ addSubview:photoView];
       [photoViews_ replaceObjectAtIndex:index withObject:photoView];
-      [photoView release];
    } else {
       // Turn off zooming.
       [currentPhotoView turnOffZoom];
@@ -576,7 +569,6 @@ const CGFloat ktkDefaultToolbarHeight = 44;
                                               destructiveButtonTitle:NSLocalizedString(@"Delete Photo", @"Delete Photo button text.")
                                                    otherButtonTitles:nil];
    [actionSheet showInView:[self view]];
-   [actionSheet release];
 }
 
 - (void) exportPhoto

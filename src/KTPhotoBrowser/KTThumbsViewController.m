@@ -21,9 +21,8 @@
 @synthesize dataSource = dataSource_;
 
 - (void)dealloc {
-   [scrollView_ release], scrollView_ = nil;
+   scrollView_ = nil;
    
-   [super dealloc];
 }
 
 - (void)loadView {
@@ -57,10 +56,8 @@
    
    // Retain a reference to the scroll view.
    scrollView_ = scrollView;
-   [scrollView_ retain];
    
    // Release the local scroll view reference.
-   [scrollView release];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -119,7 +116,6 @@
                                                   andStartWithPhotoAtIndex:index];
   
    [[self navigationController] pushViewController:newController animated:YES];
-   [newController release];
 }
 
 
@@ -136,7 +132,7 @@
 {
    KTThumbView *thumbView = [thumbsView dequeueReusableThumbView];
    if (!thumbView) {
-      thumbView = [[[KTThumbView alloc] initWithFrame:CGRectZero] autorelease];
+      thumbView = [[KTThumbView alloc] initWithFrame:CGRectZero];
       [thumbView setController:self];
    }
 

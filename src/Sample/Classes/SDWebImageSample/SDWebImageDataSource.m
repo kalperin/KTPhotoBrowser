@@ -16,8 +16,7 @@
 @implementation SDWebImageDataSource
 
 - (void)dealloc {
-   [images_ release], images_ = nil;
-   [super dealloc];
+   images_ = nil;
 }
 
 - (id)init {

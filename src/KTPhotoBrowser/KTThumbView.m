@@ -14,7 +14,7 @@
 @implementation KTThumbView
 
 @synthesize controller = controller_;
-
+@synthesize index;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -29,6 +29,8 @@
       // If the thumbnail needs to be scaled, it should mantain its aspect
       // ratio.
       [[self imageView] setContentMode:UIViewContentModeScaleAspectFill];
+	   
+	   self.index = -1;
    }
    return self;
 }
@@ -43,6 +45,13 @@
 - (void)setThumbImage:(UIImage *)newImage 
 {
   [self setImage:newImage forState:UIControlStateNormal];
+}
+
+- (void)setThumbImage:(UIImage *)newImage forIndex:(NSInteger)anIndex
+{
+	if (self.index < 0 || anIndex == self.index) {
+		[self setThumbImage:newImage];
+	}
 }
 
 - (void)setHasBorder:(BOOL)hasBorder

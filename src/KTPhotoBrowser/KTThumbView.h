@@ -17,9 +17,11 @@
 }
 
 @property (nonatomic, unsafe_unretained) KTThumbsViewController *controller;
+@property(nonatomic, assign)NSInteger index;
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)setThumbImage:(UIImage *)newImage;
+- (void)setThumbImage:(UIImage *)newImage forIndex:(NSInteger)anIndex;
 - (void)setHasBorder:(BOOL)hasBorder;
 
 @end

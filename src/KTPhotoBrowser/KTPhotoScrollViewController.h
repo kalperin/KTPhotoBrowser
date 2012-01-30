@@ -46,5 +46,5 @@
 
 - (id)initWithDataSource:(id <KTPhotoBrowserDataSource>)dataSource andStartWithPhotoAtIndex:(NSUInteger)index;
 - (void)toggleChromeDisplay;
-
+-(void)reloadPhoto;
 @end

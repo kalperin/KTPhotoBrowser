@@ -10,6 +10,11 @@
 #import "KTPhotoScrollViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
+@interface KTPhotoView ()
+@property(nonatomic, strong)IBOutlet UIActivityIndicatorView *activityIndicator;
+
+@end
+
 @interface KTPhotoView (KTPrivateMethods)
 - (void)loadSubviewsWithFrame:(CGRect)frame;
 - (BOOL)isZoomed;
@@ -20,6 +25,7 @@
 
 @synthesize scroller = scroller_;
 @synthesize index = index_;
+@synthesize activityIndicator;
 
 - (void)dealloc 
 {
@@ -44,13 +50,54 @@
    imageView_ = [[UIImageView alloc] initWithFrame:frame];
    [imageView_ setContentMode:UIViewContentModeScaleAspectFit];
    [self addSubview:imageView_];
+	
+	self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	CGRect bounds = [self bounds];
+	CGPoint center = CGPointMake(roundf(CGRectGetMidX(bounds)), roundf(CGRectGetMidY(bounds)));
+	center.x = roundf(center.x);
+	center.y = roundf(center.y);
+
+	self.activityIndicator.center = center;
+	self.activityIndicator.hidesWhenStopped = NO;
+	self.activityIndicator.hidden = NO;
+	self.activityIndicator.alpha = 1.0;
+	[self.activityIndicator startAnimating];
+	[self addSubview:self.activityIndicator];
+
+	
 }
 
 - (void)setImage:(UIImage *)newImage 
 {
    [imageView_ setImage:newImage];
+	[self showActivityIndicator:NO];
 }
 
+-(void)showActivityIndicator:(BOOL)show
+{
+	if (show) {
+		self.activityIndicator.hidden = NO;
+		self.activityIndicator.alpha = 0.0;
+		[self.activityIndicator startAnimating];
+		[UIView animateWithDuration:0.3 
+						 animations:^{
+							 self.activityIndicator.alpha = 1.0;
+						 } 
+		 ];
+
+		
+	} else {
+		[UIView animateWithDuration:0.3 
+						 animations:^{
+							 self.activityIndicator.alpha = 0.0;
+						 } 
+						 completion:^(BOOL finished) {
+							 self.activityIndicator.hidden = YES;
+							 [self.activityIndicator stopAnimating];
+						 }
+		 ];
+	}
+}
 - (void)layoutSubviews 
 {
    [super layoutSubviews];

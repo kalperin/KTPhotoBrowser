@@ -99,10 +99,17 @@
    // Do nothing by default.
 }
 
-- (void)reloadThumbs {
-   [self willLoadThumbs];
-   [scrollView_ reloadData];
-   [self didLoadThumbs];
+- (void)reloadThumbs 
+{
+	[self willLoadThumbs];
+	[self performSelector:@selector(delayedLoadThumbs) withObject:nil afterDelay:0.01f];	
+}
+
+-(void)delayedLoadThumbs
+{
+	[scrollView_ reloadData];
+	[self didLoadThumbs];
+	
 }
 
 - (void)setDataSource:(id <KTPhotoBrowserDataSource>)newDataSource {
@@ -135,6 +142,7 @@
       thumbView = [[KTThumbView alloc] initWithFrame:CGRectZero];
       [thumbView setController:self];
    }
+	thumbView.index = index;
 
    // Set thumbnail image.
    if ([dataSource_ respondsToSelector:@selector(thumbImageAtIndex:thumbView:)] == NO) {
@@ -143,6 +151,7 @@
       [thumbView setThumbImage:thumbImage];
    } else {
       // Set thumbnail image asynchronously.
+	  [thumbView setThumbImage:nil];
       [dataSource_ thumbImageAtIndex:index thumbView:thumbView];
    }
    

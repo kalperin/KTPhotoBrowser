@@ -29,5 +29,6 @@
 - (void)setMaxMinZoomScalesForCurrentBounds;
 - (void)restoreCenterPoint:(CGPoint)oldCenter scale:(CGFloat)oldScale;
 
+-(void)showActivityIndicator:(BOOL)show;
 
 @end

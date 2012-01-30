@@ -316,23 +316,31 @@ const CGFloat ktkDefaultToolbarHeight = 44;
       [photoView setScroller:self];
       [photoView setIndex:index];
       [photoView setBackgroundColor:[UIColor clearColor]];
-      
+
+	   [scrollView_ addSubview:photoView];
+	   [photoViews_ replaceObjectAtIndex:index withObject:photoView];
+
       // Set the photo image.
-      if (dataSource_) {
-         if ([dataSource_ respondsToSelector:@selector(imageAtIndex:photoView:)] == NO) {
-            UIImage *image = [dataSource_ imageAtIndex:index];
-            [photoView setImage:image];
-         } else {
-            [dataSource_ imageAtIndex:index photoView:photoView];
-         }
-      }
-      
-      [scrollView_ addSubview:photoView];
-      [photoViews_ replaceObjectAtIndex:index withObject:photoView];
+	   [self performSelector:@selector(delayedSetPhotoImageAtIndex:) withObject:[NSNumber numberWithInteger:index] afterDelay:0.01f];
    } else {
       // Turn off zooming.
       [currentPhotoView turnOffZoom];
    }
+}
+
+-(void)delayedSetPhotoImageAtIndex:(NSNumber *)indexNumber
+{
+	NSInteger index = [indexNumber integerValue];
+	KTPhotoView *photoView = [photoViews_ objectAtIndex:index];
+	if (dataSource_ && photoView != nil) {
+		if ([dataSource_ respondsToSelector:@selector(imageAtIndex:photoView:)] == NO) {
+            UIImage *image = [dataSource_ imageAtIndex:index];
+            [photoView setImage:image];
+		} else {
+            [dataSource_ imageAtIndex:index photoView:photoView];
+		}
+	}
+	
 }
 
 - (void)unloadPhoto:(NSInteger)index
@@ -362,7 +370,14 @@ const CGFloat ktkDefaultToolbarHeight = 44;
    [self toggleNavButtons];
 }
 
-
+-(void)reloadPhoto
+{
+	[self unloadPhoto:currentIndex_ + 1];
+	[self unloadPhoto:currentIndex_];
+	[self unloadPhoto:currentIndex_ - 1];
+	
+	[self setCurrentIndex:currentIndex_];
+}
 #pragma mark -
 #pragma mark Rotation Magic
 

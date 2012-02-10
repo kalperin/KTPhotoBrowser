@@ -45,4 +45,9 @@
  */
 - (void)didSelectThumbAtIndex:(NSUInteger)index;
 
+/**
+ * get the photo view controller so that we can start with it at the top of the navigation stack
+ */
+-(UIViewController *)viewControllerForPhotoAtIndex:(NSUInteger)index;
+
 @end

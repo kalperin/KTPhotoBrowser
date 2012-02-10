@@ -18,14 +18,14 @@ const CGFloat ktkDefaultToolbarHeight = 44;
 #define BUTTON_DELETEPHOTO 0
 #define BUTTON_CANCEL 1
 
-@interface KTPhotoScrollViewController (KTPrivate)
+@interface KTPhotoScrollViewController ()
+@property(nonatomic, strong)UIBarButtonItem *exportButton;
 - (void)setCurrentIndex:(NSInteger)newIndex;
 - (void)toggleChrome:(BOOL)hide;
 - (void)startChromeDisplayTimer;
 - (void)cancelChromeDisplayTimer;
 - (void)hideChrome;
 - (void)showChrome;
-- (void)swapCurrentAndNextPhotos;
 - (void)nextPhoto;
 - (void)previousPhoto;
 - (void)toggleNavButtons;
@@ -41,6 +41,8 @@ const CGFloat ktkDefaultToolbarHeight = 44;
 
 @synthesize statusBarStyle = statusBarStyle_;
 @synthesize statusbarHidden = statusbarHidden_;
+@synthesize exportButton;
+@synthesize chromeEnabled;
 
 
 - (void)dealloc 
@@ -69,6 +71,7 @@ const CGFloat ktkDefaultToolbarHeight = 44;
      [self setStatusbarHidden:isStatusbarHidden];
      
      self.hidesBottomBarWhenPushed = YES;
+     self.chromeEnabled = YES;
    }
    return self;
 }
@@ -114,10 +117,10 @@ const CGFloat ktkDefaultToolbarHeight = 44;
                                                                  action:@selector(trashPhoto)];
    }
    
-   UIBarButtonItem *exportButton = nil;
-   if ([dataSource_ respondsToSelector:@selector(exportImageAtIndex:)])
+   self.exportButton = nil;
+	if ([dataSource_ respondsToSelector:@selector(exportImageAtIndex:sender:)])
    {
-      exportButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
+      self.exportButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction 
                                                                    target:self
                                                                    action:@selector(exportPhoto)];
    }
@@ -129,7 +132,7 @@ const CGFloat ktkDefaultToolbarHeight = 44;
    
    NSMutableArray *toolbarItems = [[NSMutableArray alloc] initWithCapacity:7];
    
-   if (exportButton) [toolbarItems addObject:exportButton];
+   if (self.exportButton) [toolbarItems addObject:self.exportButton];
    [toolbarItems addObject:space];
    [toolbarItems addObject:previousButton_];
    [toolbarItems addObject:space];
@@ -312,7 +315,13 @@ const CGFloat ktkDefaultToolbarHeight = 44;
    if (NO == [currentPhotoView isKindOfClass:[KTPhotoView class]]) {
       // Load the photo view.
       CGRect frame = [self frameForPageAtIndex:index];
-      KTPhotoView *photoView = [[KTPhotoView alloc] initWithFrame:frame];
+	   Class photoViewClass = NULL;
+	   if ([dataSource_ respondsToSelector:@selector(photoViewClass)]) {
+		   photoViewClass = [dataSource_ photoViewClass];
+	   } else {
+		   photoViewClass = [KTPhotoView class];
+	   }
+	  KTPhotoView *photoView = [[photoViewClass alloc] initWithFrame:frame];
       [photoView setScroller:self];
       [photoView setIndex:index];
       [photoView setBackgroundColor:[UIColor clearColor]];
@@ -476,37 +485,40 @@ const CGFloat ktkDefaultToolbarHeight = 44;
 
 - (void)toggleChrome:(BOOL)hide 
 {
-   isChromeHidden_ = hide;
-   if (hide) {
-      [UIView beginAnimations:nil context:nil];
-      [UIView setAnimationDuration:0.4];
-   }
-   
-   if ( ! [self isStatusbarHidden] ) {     
-     if ([[UIApplication sharedApplication] respondsToSelector:@selector(setStatusBarHidden:withAnimation:)]) {
-       [[UIApplication sharedApplication] setStatusBarHidden:hide withAnimation:NO];
-     } else {  // Deprecated in iOS 3.2+.
-       id sharedApp = [UIApplication sharedApplication];  // Get around deprecation warnings.
-       [sharedApp setStatusBarHidden:hide animated:NO];
-     }
-   }
-
-   CGFloat alpha = hide ? 0.0 : 1.0;
-   
-   // Must set the navigation bar's alpha, otherwise the photo
-   // view will be pushed until the navigation bar.
-   UINavigationBar *navbar = [[self navigationController] navigationBar];
-   [navbar setAlpha:alpha];
-
-   [toolbar_ setAlpha:alpha];
-
-   if (hide) {
-      [UIView commitAnimations];
-   }
-   
-   if ( ! isChromeHidden_ ) {
-      [self startChromeDisplayTimer];
-   }
+	if (self.chromeEnabled) {
+		isChromeHidden_ = hide;
+		if (hide) {
+			[UIView beginAnimations:nil context:nil];
+			[UIView setAnimationDuration:0.4];
+		}
+		
+		if ( ! [self isStatusbarHidden] ) {     
+			if ([[UIApplication sharedApplication] respondsToSelector:@selector(setStatusBarHidden:withAnimation:)]) {
+				[[UIApplication sharedApplication] setStatusBarHidden:hide withAnimation:NO];
+			} else {  // Deprecated in iOS 3.2+.
+				id sharedApp = [UIApplication sharedApplication];  // Get around deprecation warnings.
+				[sharedApp setStatusBarHidden:hide animated:NO];
+			}
+		}
+		
+		CGFloat alpha = hide ? 0.0 : 1.0;
+		
+		// Must set the navigation bar's alpha, otherwise the photo
+		// view will be pushed until the navigation bar.
+		UINavigationBar *navbar = [[self navigationController] navigationBar];
+		[navbar setAlpha:alpha];
+		
+		[toolbar_ setAlpha:alpha];
+		
+		if (hide) {
+			[UIView commitAnimations];
+		}
+		
+		if ( ! isChromeHidden_ ) {
+			[self startChromeDisplayTimer];
+		}
+		
+	}
 }
 
 - (void)hideChrome 
@@ -541,6 +553,13 @@ const CGFloat ktkDefaultToolbarHeight = 44;
    }
 }
 
+-(void)setChromeEnabled:(BOOL)aChromeEnabled
+{
+	if (!aChromeEnabled) {
+		[self hideChrome];
+	}
+	chromeEnabled = aChromeEnabled;
+}
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate
@@ -588,8 +607,8 @@ const CGFloat ktkDefaultToolbarHeight = 44;
 
 - (void) exportPhoto
 {
-   if ([dataSource_ respondsToSelector:@selector(exportImageAtIndex:)])
-      [dataSource_ exportImageAtIndex:currentIndex_];
+   if ([dataSource_ respondsToSelector:@selector(exportImageAtIndex:sender:)])
+      [dataSource_ exportImageAtIndex:currentIndex_ sender:self.exportButton];
    
    [self startChromeDisplayTimer];
 }

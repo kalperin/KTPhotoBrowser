@@ -25,6 +25,7 @@
    
 }
 
+
 - (void)loadView {
    // Make sure to set wantsFullScreenLayout or the photo
    // will not display behind the status bar.
@@ -118,13 +119,19 @@
 }
 
 - (void)didSelectThumbAtIndex:(NSUInteger)index {
-   KTPhotoScrollViewController *newController = [[KTPhotoScrollViewController alloc] 
-                                                        initWithDataSource:dataSource_ 
-                                                  andStartWithPhotoAtIndex:index];
+   UIViewController *newController = [self viewControllerForPhotoAtIndex: index];
   
    [[self navigationController] pushViewController:newController animated:YES];
 }
 
+-(UIViewController *)viewControllerForPhotoAtIndex:(NSUInteger)index
+{
+	KTPhotoScrollViewController *newController = [[KTPhotoScrollViewController alloc] 
+												  initWithDataSource:dataSource_ 
+                                                  andStartWithPhotoAtIndex:index];
+	return newController;
+
+}
 
 #pragma mark -
 #pragma mark KTThumbsViewDataSource

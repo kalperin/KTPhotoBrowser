@@ -43,8 +43,10 @@
 
 @property (nonatomic, assign) UIStatusBarStyle statusBarStyle;
 @property (nonatomic, assign, getter=isStatusbarHidden) BOOL statusbarHidden;
-
+@property(nonatomic, assign, getter=isChromeEnabled)BOOL chromeEnabled;
 - (id)initWithDataSource:(id <KTPhotoBrowserDataSource>)dataSource andStartWithPhotoAtIndex:(NSUInteger)index;
 - (void)toggleChromeDisplay;
 -(void)reloadPhoto;
+- (void)toggleChrome:(BOOL)hide;
+
 @end

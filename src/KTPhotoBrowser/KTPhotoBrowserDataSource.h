@@ -25,8 +25,11 @@
 - (void)imageAtIndex:(NSInteger)index photoView:(KTPhotoView *)photoView;
 - (void)thumbImageAtIndex:(NSInteger)index thumbView:(KTThumbView *)thumbView;
 
+//to provide your own KTPhotoView implementation
+-(Class)photoViewClass;
+
 - (void)deleteImageAtIndex:(NSInteger)index;
-- (void)exportImageAtIndex:(NSInteger)index;
+- (void)exportImageAtIndex:(NSInteger)index sender:(id)sender;
 
 - (CGSize)thumbSize;
 - (NSInteger)thumbsPerRow;
